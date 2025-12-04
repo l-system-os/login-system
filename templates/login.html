@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>ログインシステム</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "Yu Gothic UI", sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #e8eaf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .window {
+            background-color: #f5f5f5;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            width: 720px;
+            padding: 16px 24px 24px;
+            box-sizing: border-box;
+        }
+        .window-titlebar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .window-buttons {
+            display: flex;
+            gap: 6px;
+        }
+        .wnd-btn {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .wnd-btn.close { background-color: #ff5f57; }
+        .wnd-btn.min   { background-color: #ffbd2e; }
+        .wnd-btn.max   { background-color: #28c840; }
+
+        .window-title {
+            font-size: 14px;
+            color: #555;
+        }
+
+        h2 {
+            margin: 0 0 8px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .message-area {
+            margin-bottom: 12px;
+        }
+        .message-area ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .message-area li {
+            padding: 6px 10px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .message-area li strong {
+            margin-right: 4px;
+        }
+        .message-area li.error {
+            background-color: #ffebee;
+            color: #b71c1c;
+        }
+        .message-area li.info {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        .forms-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .panel {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 10px 12px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+        }
+        .panel h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            color: #2c387e;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
+        }
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .form-row label {
+            width: 85px;
+            font-size: 13px;
+            color: #333;
+        }
+        .form-row input[type="text"],
+        .form-row input[type="password"] {
+            flex: 1;
+            padding: 4px 6px;
+            font-size: 13px;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn-row {
+            text-align: right;
+            margin-top: 4px;
+        }
+        button {
+            padding: 4px 10px;
+            font-size: 13px;
+            border-radius: 4px;
+            border: none;
+            background-color: #3f51b5;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #303f9f;
+        }
+    </style>
+</head>
+<body>
+<div class="window">
+    <div class="window-titlebar">
+        <div class="window-buttons">
+            <div class="wnd-btn close"></div>
+            <div class="wnd-btn min"></div>
+            <div class="wnd-btn max"></div>
+        </div>
+        <div class="window-title">ログインシステム</div>
+        <div style="width:40px;"></div>
+    </div>
+
+    <h2>ログインシステム</h2>
+
+    <!-- flash メッセージ表示 -->
+    <div class="message-area">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+        {% for category, message in messages %}
+          <li class="{{ category }}"><strong>{{ category }}</strong> {{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    </div>
+
+    <div class="forms-grid">
+        <!-- 新規登録 -->
+        <form action="/register" method="post" class="panel">
+            <h3>新規登録</h3>
+            <div class="form-row">
+                <label>ユーザー名:</label>
+                <input type="text" name="username">
+            </div>
+            <div class="btn-row">
+                <button type="submit">登録</button>
+            </div>
+        </form>
+
+        <!-- ログイン -->
+        <form action="/login" method="post" class="panel">
+            <h3>ログイン</h3>
+            <div class="form-row">
+                <label>ユーザー名:</label>
+                <input type="text" name="username">
+            </div>
+            <div class="form-row">
+                <label>パスワード:</label>
+                <input type="password" name="password">
+            </div>
+            <div class="btn-row">
+                <button type="submit">ログイン</button>
+            </div>
+        </form>
+
+        <!-- パスワード再設定 -->
+        <form action="/reset" method="post" class="panel">
+            <h3>パスワード再設定</h3>
+            <div class="form-row">
+                <label>ユーザー名:</label>
+                <input type="text" name="username">
+            </div>
+            <div class="form-row">
+                <label>現パスワード:</label>
+                <input type="password" name="password">
+            </div>
+            <div class="btn-row">
+                <button type="submit">再設定</button>
+            </div>
+        </form>
+
+        <!-- ユーザー削除 -->
+        <form action="/delete" method="post" class="panel">
+            <h3>ユーザー削除</h3>
+            <div class="form-row">
+                <label>ユーザー名:</label>
+                <input type="text" name="username">
+            </div>
+            <div class="form-row">
+                <label>パスワード:</label>
+                <input type="password" name="password">
+            </div>
+            <div class="btn-row">
+                <button type="submit">削除</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

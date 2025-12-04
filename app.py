@@ -4,8 +4,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    # templates/index.html を表示する
-    return render_template("index.html")
+    # templates/login
+    .html を表示する
+    return render_template("login.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
